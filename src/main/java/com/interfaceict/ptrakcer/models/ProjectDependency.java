@@ -4,10 +4,14 @@
 
 package com.interfaceict.ptrakcer.models;
 
+import org.springframework.data.repository.cdi.CdiRepositoryExtensionSupport;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ProjectDependency
@@ -19,12 +23,14 @@ public class ProjectDependency
     private Long m_ID;
 
     @Column(name = "name", nullable = false)
+    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
     private String m_Description;
 
     @Column(name = "status")
+    @NotNull
     private Boolean m_Status;
 
     ProjectDependency() {}
@@ -38,6 +44,10 @@ public class ProjectDependency
         m_Status = status;
     }
 
+    /*
+    *   Getters
+    */
+
     public Long getID() { return m_ID; }
 
     public String getName() { return m_Name; }
@@ -45,6 +55,20 @@ public class ProjectDependency
     public String getDescription() { return m_Description; }
 
     public Boolean getStatus() { return m_Status; }
+
+    /*
+    *   Setters
+    */
+
+    public void setName(String name) { m_Name = name; }
+
+    public void setDescription(String description) { m_Description = description; }
+
+    public void setStatus(Boolean status) { m_Status = status; }
+
+    /*
+    *   Utilities
+    */
 
     @Override
     public String toString()

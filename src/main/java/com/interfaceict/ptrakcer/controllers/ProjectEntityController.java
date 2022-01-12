@@ -5,7 +5,7 @@
 package com.interfaceict.ptrakcer.controllers;
 
 import com.interfaceict.ptrakcer.models.ProjectEntity;
-import com.interfaceict.ptrakcer.servicesimpl.ProjectEntityServiceImpl;
+import com.interfaceict.ptrakcer.services.ProjectEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class ProjectEntityController
 {
     @Autowired
-    private ProjectEntityServiceImpl m_Service;
+    private ProjectEntityService m_Service;
 
     @GetMapping("/projects")
     public List<ProjectEntity> getAllProjects() { return m_Service.getAll(); }

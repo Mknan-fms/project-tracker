@@ -7,6 +7,9 @@ package com.interfaceict.ptrakcer.models;
 import com.interfaceict.ptrakcer.enums.ApplicationType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class ProjectSoftwareDetails
@@ -18,6 +21,7 @@ public class ProjectSoftwareDetails
     private Long m_ID;
 
     @Column(name = "name")
+    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
@@ -25,45 +29,33 @@ public class ProjectSoftwareDetails
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ApplicationType m_Type;
 
     @Column(name = "lang")
+    @NotNull @NotEmpty
     private String m_Lang;
 
     @Column(name = "framework")
+    @NotNull @NotEmpty
     private String m_FrameworkUsed;
 
-    // == Database details == - in future it might have a separate model
-    @Column(name = "database_name")
-    private String m_DatabaseName;
-
-    @Column(name = "database_type")
-    private String m_DatabaseType;
-
-    @Column(name = "database_version")
-    private String m_DatabaseVersion;
-    // == ================ ==
+    @OneToMany
+    @JoinColumn(name = "id")
+    @NotNull
+    private List<DatabaseEntity> m_Databases;
 
     ProjectSoftwareDetails() {}
 
-    ProjectSoftwareDetails(String name,
-                           ApplicationType type,
-                           String lang,
-                           String frameworkUsed,
-                           String databaseName,
-                           String databaseType,
-                           String databaseVersion)
-    {
-        m_Name = name;
-        m_Type = type;
-        m_Lang = lang;
-        m_FrameworkUsed = frameworkUsed;
-        m_DatabaseName = databaseName;
-        m_DatabaseType = databaseType;
-        m_DatabaseVersion = databaseVersion;
-    }
+    /*
+    *   Getters
+    */
+
+    public Long getID() { return m_ID; }
 
     public String getName() { return m_Name; }
+
+    public String getDescription() { return m_Description; }
 
     public ApplicationType getApplicationType() { return m_Type; }
 
@@ -71,11 +63,23 @@ public class ProjectSoftwareDetails
 
     public String getFramework() { return m_FrameworkUsed; }
 
-    public String getDatabaseName() { return m_DatabaseName; }
+    public List<DatabaseEntity> getDatabases() { return m_Databases; }
 
-    public String getDatabaseType() { return m_DatabaseType; }
+    /*
+    *   Setters
+    */
 
-    public String getDatabaseVersion() { return m_DatabaseVersion; }
+    public void setName(String name) { m_Name = name; }
+
+    public void setDescription(String description) { m_Description = description; }
+
+    public void setApplicationType(ApplicationType type) { m_Type = type; }
+
+    public void setProgrammingLanguage(String language) { m_Lang = language; }
+
+    public void setFrameworkUsed(String framework) { m_FrameworkUsed = framework; }
+
+    public void setDatabases(List<DatabaseEntity> databases) { m_Databases = databases; }
 
     @Override
     public String toString()
@@ -86,8 +90,6 @@ public class ProjectSoftwareDetails
                 m_Type.toString(),
                 m_Lang,
                 m_FrameworkUsed,
-                m_DatabaseName,
-                m_DatabaseType,
-                m_DatabaseVersion);
+                m_Databases.toString());
     }
 }
