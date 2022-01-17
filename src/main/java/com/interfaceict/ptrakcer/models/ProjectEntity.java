@@ -7,6 +7,9 @@ package com.interfaceict.ptrakcer.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.interfaceict.ptrakcer.enums.ProjectStatus;
+
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +34,14 @@ public class ProjectEntity
      * and it should an ENUM type, since the project can have multiple status:
      * <pre>{PENDING , STARTED , STOPPED , CANCELED , COMPLETED}</pre>
      */
+    
+    /**
+     * Value of this class field should have a dedicated API for changing its value 
+     */
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private Boolean m_Status;
+    private ProjectStatus m_Status;
 
     @Column(name = "duration")
     @NotNull
@@ -60,7 +68,10 @@ public class ProjectEntity
     @JoinColumn(name = "id")
     private List<ProjectDependency> m_Dependencies;
 
-    ProjectEntity() {}
+    /**
+     * We should at least declare one public constructor
+     */
+    public ProjectEntity() {}
 
     public Long getId() { return m_ID; }
 
@@ -72,9 +83,9 @@ public class ProjectEntity
 
     public String getDescription() { return m_Description; }
 
-    public void setStatus(Boolean status) { m_Status = status; }
+    public void setStatus(ProjectStatus status) { m_Status = status; }
 
-    public Boolean getStatus() { return m_Status; }
+    public ProjectStatus getStatus() { return m_Status; }
 
     public void setDuration(Long duration) { m_Duration = duration; }
 

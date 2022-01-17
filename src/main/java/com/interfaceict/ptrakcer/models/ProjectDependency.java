@@ -4,7 +4,6 @@
 
 package com.interfaceict.ptrakcer.models;
 
-import org.springframework.data.repository.cdi.CdiRepositoryExtensionSupport;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
