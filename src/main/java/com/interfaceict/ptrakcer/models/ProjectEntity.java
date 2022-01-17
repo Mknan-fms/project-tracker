@@ -25,6 +25,11 @@ public class ProjectEntity
     @Column(name = "description")
     private String m_Description;
 
+    /**
+     * TODO: This class field should have initial value
+     * and it should an ENUM type, since the project can have multiple status:
+     * <pre>{PENDING , STARTED , STOPPED , CANCELED , COMPLETED}</pre>
+     */
     @Column(name = "status")
     private Boolean m_Status;
 
