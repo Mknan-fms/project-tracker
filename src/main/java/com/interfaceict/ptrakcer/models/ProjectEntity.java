@@ -4,11 +4,11 @@
 
 package com.interfaceict.ptrakcer.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class ProjectEntity
@@ -19,7 +19,8 @@ public class ProjectEntity
     @Column(name = "id", nullable = false)
     private Long m_ID;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
+    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
@@ -31,9 +32,11 @@ public class ProjectEntity
      * <pre>{PENDING , STARTED , STOPPED , CANCELED , COMPLETED}</pre>
      */
     @Column(name = "status")
+    @NotNull
     private Boolean m_Status;
 
     @Column(name = "duration")
+    @NotNull
     private Long m_Duration; // duration in months
 
     @Column(name = "start_date")
@@ -45,24 +48,19 @@ public class ProjectEntity
     @Column(name = "delivery_date")
     private Date m_DeliveryDate;
 
-    ProjectEntity() {}
+    @OneToOne
+    @JoinColumn(name = "id")
+    private ProjectSoftwareDetails m_SoftwareDetails;
 
-    ProjectEntity(String name,
-                  String description,
-                  Boolean status,
-                  Long duration,
-                  Date startDate,
-                  Date completionDate,
-                  Date deliveryDate)
-    {
-        m_Name = name;
-        m_Description = description;
-        m_Status = status;
-        m_Duration = duration;
-        m_StartDate = startDate;
-        m_CompletionDate = completionDate;
-        m_DeliveryDate = deliveryDate;
-    }
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<ProjectAsset> m_Assets;
+
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<ProjectDependency> m_Dependencies;
+
+    ProjectEntity() {}
 
     public Long getId() { return m_ID; }
 
@@ -93,6 +91,18 @@ public class ProjectEntity
     public void setDeliveryDate(Date date) { m_DeliveryDate = date; }
 
     public Date getDeliveryDate() { return m_DeliveryDate; }
+
+    public void setSoftwareDetails(ProjectSoftwareDetails details) { m_SoftwareDetails = details; }
+
+    public ProjectSoftwareDetails getSoftwareDetails() { return m_SoftwareDetails; }
+
+    public void setAssets(List<ProjectAsset> assets) { m_Assets = assets; }
+
+    public List<ProjectAsset> getAssets() { return m_Assets; }
+
+    public void setDependencies(List<ProjectDependency> dependencies) { m_Dependencies = dependencies; }
+
+    public List<ProjectDependency> getDependencies() { return m_Dependencies; }
 
     @Override
     public String toString()

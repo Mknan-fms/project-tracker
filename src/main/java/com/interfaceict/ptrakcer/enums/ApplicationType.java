@@ -6,9 +6,9 @@ package com.interfaceict.ptrakcer.enums;
 
 public enum ApplicationType
 {
-    Web,
-    Mobile,
+    WEB,
+    MOBILE,
     CMD,
-    IntegrationAPI,
-    Desktop
+    INTEGRATIONAPI,
+    DESKTOP
 }

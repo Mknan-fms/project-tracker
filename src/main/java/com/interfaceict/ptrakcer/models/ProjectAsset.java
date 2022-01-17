@@ -6,10 +6,9 @@ package com.interfaceict.ptrakcer.models;
 
 import com.interfaceict.ptrakcer.enums.AssetType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Base64;
 
 @Entity
@@ -22,15 +21,19 @@ public class ProjectAsset
     private Long m_ID;
 
     @Column(name = "name", nullable = false)
+    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
     private String m_Description;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private AssetType m_Type;
 
     @Column(name = "asset_file")
+    @NotNull @NotEmpty
     private String m_EncodedAssetFile; // Base64 string
 
     ProjectAsset() {}
@@ -44,15 +47,31 @@ public class ProjectAsset
         m_Type = type;
     }
 
+    /*
+    *   Getters
+    */
+
     public Long getID() { return m_ID; }
 
     public String getName() { return m_Name; }
 
     public String getDescription() { return m_Description; }
 
+    public AssetType getAssetType() { return m_Type; }
+
+    /*
+    *   Setters
+    */
+
+    public void setName(String name) { m_Name = name; }
+
+    public void setDescription(String description) { m_Description = description; }
+
     public void setType(AssetType type) { m_Type = type; }
 
-    public AssetType getAssetType() { return m_Type; }
+    /*
+    *   Utilities
+    */
 
     // Setter for asset file
     public void encodeAssetFile(String fileData) { m_EncodedAssetFile = Base64.getEncoder().encodeToString(fileData.getBytes()); }

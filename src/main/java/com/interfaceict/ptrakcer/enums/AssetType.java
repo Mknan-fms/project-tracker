@@ -6,8 +6,8 @@ package com.interfaceict.ptrakcer.enums;
 
 public enum AssetType // initially added only four types, but in future it might change
 {
-    APIDocs,
-    Design,
-    FlowChart,
-    BusinessRequirementDocs
+    APIDOCS,
+    DESIGN,
+    FLOWCHART,
+    BUSINESSREQUIREMENTDOCS
 }
