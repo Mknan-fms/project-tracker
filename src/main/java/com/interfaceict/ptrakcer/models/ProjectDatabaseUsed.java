@@ -9,7 +9,7 @@ import com.interfaceict.ptrakcer.enums.DatabaseType;
 import javax.persistence.*;
 
 @Entity
-public class DatabaseEntity
+public class ProjectDatabaseUsed
 {
     @Id @GeneratedValue
     @Column(name = "id")

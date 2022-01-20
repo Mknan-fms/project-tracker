@@ -4,13 +4,10 @@
 
 package com.interfaceict.ptrakcer.models;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class ProjectDependency
@@ -22,26 +19,15 @@ public class ProjectDependency
     private Long m_ID;
 
     @Column(name = "name", nullable = false)
-    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
     private String m_Description;
 
     @Column(name = "status")
-    @NotNull
     private Boolean m_Status;
 
-    ProjectDependency() {}
-
-    ProjectDependency(String name,
-                      String description,
-                      Boolean status)
-    {
-        m_Name = name;
-        m_Description = description;
-        m_Status = status;
-    }
+    public ProjectDependency() {}
 
     /*
     *   Getters

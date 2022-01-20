@@ -12,9 +12,9 @@ package com.interfaceict.ptrakcer.enums;
  */
 public enum ProjectStatus {
 
-	PENDING ,
-	STARTED ,
-	STOPPED ,
-	CANCELED ,
+	PENDING,
+	STARTED,
+	STOPPED,
+	CANCELED,
 	COMPLETED
 }

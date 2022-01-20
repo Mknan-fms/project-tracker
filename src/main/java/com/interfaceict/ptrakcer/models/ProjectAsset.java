@@ -7,8 +7,6 @@ package com.interfaceict.ptrakcer.models;
 import com.interfaceict.ptrakcer.enums.AssetType;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Base64;
 
 @Entity
@@ -21,7 +19,6 @@ public class ProjectAsset
     private Long m_ID;
 
     @Column(name = "name", nullable = false)
-    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
@@ -29,23 +26,12 @@ public class ProjectAsset
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
-    @NotNull
     private AssetType m_Type;
 
     @Column(name = "asset_file")
-    @NotNull @NotEmpty
     private String m_EncodedAssetFile; // Base64 string
 
-    ProjectAsset() {}
-
-    ProjectAsset(String name,
-                 String description,
-                 AssetType type)
-    {
-        m_Name = name;
-        m_Description = description;
-        m_Type = type;
-    }
+    public ProjectAsset() {}
 
     /*
     *   Getters
@@ -67,7 +53,7 @@ public class ProjectAsset
 
     public void setDescription(String description) { m_Description = description; }
 
-    public void setType(AssetType type) { m_Type = type; }
+    public void setAssetType(AssetType type) { m_Type = type; }
 
     /*
     *   Utilities

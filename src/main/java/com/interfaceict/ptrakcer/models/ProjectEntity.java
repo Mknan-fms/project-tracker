@@ -5,12 +5,10 @@
 package com.interfaceict.ptrakcer.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import com.interfaceict.ptrakcer.enums.ProjectStatus;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -23,54 +21,39 @@ public class ProjectEntity
     private Long m_ID;
 
     @Column(name = "name", nullable = false, unique = true)
-    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
     private String m_Description;
 
     /**
-     * TODO: This class field should have initial value
-     * and it should an ENUM type, since the project can have multiple status:
-     * <pre>{PENDING , STARTED , STOPPED , CANCELED , COMPLETED}</pre>
-     */
-    
-    /**
      * Value of this class field should have a dedicated API for changing its value 
      */
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @NotNull
     private ProjectStatus m_Status;
 
     @Column(name = "duration")
-    @NotNull
     private Long m_Duration; // duration in months
 
     @Column(name = "start_date")
-    private Date m_StartDate;
+    private LocalDate m_StartDate;
 
     @Column(name = "completion_date")
-    private Date m_CompletionDate;
+    private LocalDate m_CompletionDate;
 
     @Column(name = "delivery_date")
-    private Date m_DeliveryDate;
+    private LocalDate m_DeliveryDate;
 
     @OneToOne
-    @JoinColumn(name = "id")
     private ProjectSoftwareDetails m_SoftwareDetails;
 
     @OneToMany
-    @JoinColumn(name = "id")
     private List<ProjectAsset> m_Assets;
 
     @OneToMany
-    @JoinColumn(name = "id")
     private List<ProjectDependency> m_Dependencies;
 
-    /**
-     * We should at least declare one public constructor
-     */
     public ProjectEntity() {}
 
     public Long getId() { return m_ID; }
@@ -91,17 +74,17 @@ public class ProjectEntity
 
     public Long getDuration() { return m_Duration; }
 
-    public void setStartDate(Date date) { m_StartDate = date; }
+    public void setStartDate(LocalDate date) { m_StartDate = date; }
 
-    public Date getStartDate() { return m_StartDate; }
+    public LocalDate getStartDate() { return m_StartDate; }
 
-    public void setCompletionDate(Date date) { m_CompletionDate = date; }
+    public void setCompletionDate(LocalDate date) { m_CompletionDate = date; }
 
-    public Date getCompletionDate() { return m_CompletionDate; }
+    public LocalDate getCompletionDate() { return m_CompletionDate; }
 
-    public void setDeliveryDate(Date date) { m_DeliveryDate = date; }
+    public void setDeliveryDate(LocalDate date) { m_DeliveryDate = date; }
 
-    public Date getDeliveryDate() { return m_DeliveryDate; }
+    public LocalDate getDeliveryDate() { return m_DeliveryDate; }
 
     public void setSoftwareDetails(ProjectSoftwareDetails details) { m_SoftwareDetails = details; }
 

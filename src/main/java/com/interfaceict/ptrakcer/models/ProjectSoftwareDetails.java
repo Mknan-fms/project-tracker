@@ -7,8 +7,6 @@ package com.interfaceict.ptrakcer.models;
 import com.interfaceict.ptrakcer.enums.ApplicationType;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -21,7 +19,6 @@ public class ProjectSoftwareDetails
     private Long m_ID;
 
     @Column(name = "name")
-    @NotNull @NotEmpty
     private String m_Name;
 
     @Column(name = "description")
@@ -29,23 +26,18 @@ public class ProjectSoftwareDetails
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull
     private ApplicationType m_Type;
 
     @Column(name = "lang")
-    @NotNull @NotEmpty
     private String m_Lang;
 
     @Column(name = "framework")
-    @NotNull @NotEmpty
     private String m_FrameworkUsed;
 
     @OneToMany
-    @JoinColumn(name = "id")
-    @NotNull
-    private List<DatabaseEntity> m_Databases;
+    private List<ProjectDatabaseUsed> m_Databases;
 
-    ProjectSoftwareDetails() {}
+    public ProjectSoftwareDetails() {}
 
     /*
     *   Getters
@@ -63,7 +55,7 @@ public class ProjectSoftwareDetails
 
     public String getFramework() { return m_FrameworkUsed; }
 
-    public List<DatabaseEntity> getDatabases() { return m_Databases; }
+    public List<ProjectDatabaseUsed> getDatabases() { return m_Databases; }
 
     /*
     *   Setters
@@ -79,7 +71,7 @@ public class ProjectSoftwareDetails
 
     public void setFrameworkUsed(String framework) { m_FrameworkUsed = framework; }
 
-    public void setDatabases(List<DatabaseEntity> databases) { m_Databases = databases; }
+    public void setDatabases(List<ProjectDatabaseUsed> databases) { m_Databases = databases; }
 
     @Override
     public String toString()

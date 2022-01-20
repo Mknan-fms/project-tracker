@@ -11,6 +11,7 @@ import com.interfaceict.ptrakcer.repositories.ProjectEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,33 +26,24 @@ public class ProjectEntityService
 
     public List<ProjectEntity> getAll() { return new ArrayList<>(m_Repo.findAll()); }
 
-    
-    /**
-     * TODO:<br>
-     * 	Here we need to create a new project entity and set some fields' values
-     * 
-     * @param newProjectRequest
-     */
-    public ProjectEntity save(@Valid NewProject newProjectRequest) { 
-    	
+    public ProjectEntity save(@Valid NewProject newProjectRequest)
+    {
     	ProjectEntity projectEntity = new ProjectEntity();
     	
-    	projectEntity.setDuration(newProjectRequest.getM_Duration());
-    	projectEntity.setStartDate(newProjectRequest.getM_StartDate());
-    	projectEntity.setName(newProjectRequest.getM_Name());
-    	projectEntity.setDescription(newProjectRequest.getM_Description());
-    	projectEntity.setStatus(ProjectStatus.PENDING);		//Default value for project status when it's first-initialized
-    	projectEntity.setCompletionDate(null); // Here we can calculate expected finish date for the project based on start date
-    	
-    	/**
-    	 * Also, there are some dependent-fields we can set like {status, completion_date, ...etc} 
-    	 */
-    	
-    	
-    	return m_Repo.save(projectEntity); 
+    	projectEntity.setDuration(newProjectRequest.getDuration()); // duration is in months
+    	projectEntity.setStartDate(newProjectRequest.getStartDate());
+    	projectEntity.setName(newProjectRequest.getName());
+    	projectEntity.setDescription(newProjectRequest.getDescription());
+    	projectEntity.setStatus(ProjectStatus.PENDING);	// Default value for project status when it's first-initialized
+
+        // Here we calculated expected date of completion based on start date
+        LocalDate completionDate = projectEntity.getStartDate().plusMonths(projectEntity.getDuration());
+    	projectEntity.setCompletionDate(completionDate);
+
+    	return m_Repo.save(projectEntity);
     }
 
-    public ProjectEntity update(ProjectEntity entity, Long id)
+    public ProjectEntity update(NewProject entity, Long id)
     {
         Optional<ProjectEntity> entityDBOpt = m_Repo.findById(id);
         if (entityDBOpt.isEmpty()) return null;
@@ -60,13 +52,29 @@ public class ProjectEntityService
 
         entityDB.setName(entity.getName());
         entityDB.setDescription(entity.getDescription());
-        entityDB.setStatus(entity.getStatus());
+//        entityDB.setStatus(entity.getStatus()); // Status have it's own API
         entityDB.setDuration(entity.getDuration());
         entityDB.setStartDate(entity.getStartDate());
         entityDB.setCompletionDate(entity.getCompletionDate());
         entityDB.setDeliveryDate(entity.getDeliveryDate());
 
         return m_Repo.save(entityDB);
+    }
+
+    public Boolean updateStatus(ProjectStatus status, Long id)
+    {
+        if (status == ProjectStatus.COMPLETED)
+            return false;
+
+        Optional<ProjectEntity> entityDBOpt = m_Repo.findById(id);
+        if (entityDBOpt.isEmpty())
+            return false;
+
+        ProjectEntity entityDB = entityDBOpt.get();
+        entityDB.setStatus(status);
+
+        m_Repo.save(entityDB);
+        return true;
     }
 
     public void delete(Long id) { m_Repo.deleteById(id); }
