@@ -15,26 +15,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/database")
-public class ProjectDatabaseUsedController
-{
-    @Autowired
-    private ProjectDatabaseUsedService m_Service;
+public class ProjectDatabaseUsedController {
+	@Autowired
+	private ProjectDatabaseUsedService m_Service;
 
-    @GetMapping("/{projectSoftDetailsID}")
-    public List<ProjectDatabaseUsed> getAllDatabase(@PathVariable("projectSoftDetailsID") Long projectSoftDetailsID) { return m_Service.getAllByProjectSoftID(projectSoftDetailsID); }
+	@GetMapping("/{projectSoftDetailsID}")
+	public List<ProjectDatabaseUsed> getAllDatabase(@PathVariable("projectSoftDetailsID") Long projectSoftDetailsID) {
+		return m_Service.getAllByProjectSoftID(projectSoftDetailsID);
+	}
 
-    @PostMapping("/")
-    public ProjectDatabaseUsed newDatabase(@Valid @RequestBody NewDatabase database) { return m_Service.save(database); }
+	@PostMapping("/")
+	public ProjectDatabaseUsed newDatabase(@Valid @RequestBody NewDatabase database) {
+		return m_Service.save(database);
+	}
 
-    @PutMapping("/{dbUsedID}")
-    public ProjectDatabaseUsed updateDatabase(@Valid @RequestBody NewDatabase database, @PathVariable("dbUsedID") Long dbUsedID) { return m_Service.update(database, dbUsedID); }
+	@PutMapping("/{dbUsedID}")
+	public ProjectDatabaseUsed updateDatabase(@Valid @RequestBody NewDatabase database,
+			@PathVariable("dbUsedID") Long dbUsedID) {
+		return m_Service.update(database, dbUsedID);
+	}
 
-    @DeleteMapping("/{projectSoftDetailsID}/{dbUsedID}")
-    public String deleteDatabase(@PathVariable("projectSoftDetailsID") Long projectSoftDetailsID, @PathVariable("dbUsedID") Long dbUsedID)
-    {
-        if (m_Service.delete(projectSoftDetailsID, dbUsedID))
-            return "Deleted successfully!";
+	@DeleteMapping("/{projectSoftDetailsID}/{dbUsedID}")
+	public String deleteDatabase(@PathVariable("projectSoftDetailsID") Long projectSoftDetailsID,
+			@PathVariable("dbUsedID") Long dbUsedID) {
+		if (m_Service.delete(projectSoftDetailsID, dbUsedID))
+			return "Deleted successfully!";
 
-        return "Deletion failed!";
-    }
+		return "Deletion failed!";
+	}
 }

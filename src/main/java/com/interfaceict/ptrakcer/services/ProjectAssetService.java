@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +25,13 @@ public class ProjectAssetService
     @Autowired
     private ProjectEntityRepo m_ProjectRepo;
 
-    public List<ProjectAsset> getAll() { return new ArrayList<>(m_AssetRepo.findAll()); }
+    public List<ProjectAsset> getAll() { 
+    	//TODO: no need for new ArrayList constructor
+    	// `findAll` already returns a List
+    	//return new ArrayList<>(m_AssetRepo.findAll());
+    	
+    	return m_AssetRepo.findAll();
+    }
 
     public List<ProjectAsset> getAllByProjectID(Long id)
     {
