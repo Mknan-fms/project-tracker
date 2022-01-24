@@ -78,5 +78,12 @@ public class ProjectEntityService
     }
 
     public void delete(Long id) { m_Repo.deleteById(id); }
+    
+    /**
+     * TODO: instead of defining and calling `findProjectById` repository method every time
+     *       we can write `getProjectbyId` method here (For the sake of code re usability)
+     *       This is also valid for other entities's services methods  
+     */
+    
 }
 

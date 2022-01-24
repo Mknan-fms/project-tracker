@@ -15,26 +15,35 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/assets")
-public class ProjectAssetController
-{
-    @Autowired
-    private ProjectAssetService m_AssetService;
+public class ProjectAssetController {
+	@Autowired
+	private ProjectAssetService m_AssetService;
 
-    @GetMapping("/{project_id}")
-    public List<ProjectAsset> getAllAssets(@PathVariable("project_id") Long projectID) { return m_AssetService.getAllByProjectID(projectID); }
+	@GetMapping("/{project_id}")
+	public List<ProjectAsset> getAllProjectAssets(@PathVariable("project_id") Long projectID) {
+		return m_AssetService.getAllByProjectID(projectID);
+	}
+	
+	@GetMapping
+	public List<ProjectAsset> getAllAssets() {
+		return m_AssetService.getAll();
+	}
 
-    @PostMapping("/")
-    public ProjectAsset newAsset(@Valid @RequestBody NewAsset newAsset) { return m_AssetService.save(newAsset); }
+	@PostMapping("/")
+	public ProjectAsset newAsset(@Valid @RequestBody NewAsset newAsset) {
+		return m_AssetService.save(newAsset);
+	}
 
-    @PutMapping("/{id}")
-    public ProjectAsset updateAsset(@RequestBody NewAsset asset, @PathVariable("id") Long id) { return m_AssetService.update(asset, id); }
+	@PutMapping("/{id}")
+	public ProjectAsset updateAsset(@RequestBody NewAsset asset, @PathVariable("id") Long id) {
+		return m_AssetService.update(asset, id);
+	}
 
-    @DeleteMapping("/{project_id}/{asset_id}")
-    public String deleteAsset(@PathVariable("project_id") Long projectID, @PathVariable("asset_id") Long assetID)
-    {
-        if(m_AssetService.delete(projectID, assetID))
-            return "Deleted successfully!";
+	@DeleteMapping("/{project_id}/{asset_id}")
+	public String deleteAsset(@PathVariable("project_id") Long projectID, @PathVariable("asset_id") Long assetID) {
+		if (m_AssetService.delete(projectID, assetID))
+			return "Deleted successfully!";
 
-        return "Deletion failed!";
-    }
+		return "Deletion failed!";
+	}
 }
