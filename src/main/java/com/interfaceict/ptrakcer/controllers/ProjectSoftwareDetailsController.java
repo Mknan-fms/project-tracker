@@ -35,11 +35,9 @@ public class ProjectSoftwareDetailsController {
 		return m_Service.update(detail, projectSoftDetailsID);
 	}
 
-	@DeleteMapping("/{projectSoftDetailsID}")
-	public String deleteProjectSoftDetails(@PathVariable("projectSoftDetailsID") Long projectSoftDetailsID) {
-		if (m_Service.delete(projectSoftDetailsID))
-			return "Deleted successfully!";
-
-		return "Deletion failed!";
+	@DeleteMapping("/{projectID}/{projectSoftDetailsID}")
+	public String deleteProjectSoftDetails(@PathVariable("projectID") Long projectID, @PathVariable("projectSoftDetailsID") Long projectSoftDetailsID) {
+		m_Service.delete(projectID, projectSoftDetailsID);
+		return "Deleted successfully!";
 	}
 }

@@ -8,44 +8,27 @@ import com.interfaceict.ptrakcer.dto.requests.NewAsset;
 import com.interfaceict.ptrakcer.models.ProjectAsset;
 import com.interfaceict.ptrakcer.models.ProjectEntity;
 import com.interfaceict.ptrakcer.repositories.ProjectAssetRepo;
-import com.interfaceict.ptrakcer.repositories.ProjectEntityRepo;
+import com.interfaceict.ptrakcer.services.helpers.GeneralServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ProjectAssetService
+public class ProjectAssetService extends GeneralServiceHelper<ProjectAsset, ProjectAssetRepo>
 {
     @Autowired
-    private ProjectAssetRepo m_AssetRepo;
-
-    @Autowired
-    private ProjectEntityRepo m_ProjectRepo;
-
-    public List<ProjectAsset> getAll() { 
-    	//TODO: no need for new ArrayList constructor
-    	// `findAll` already returns a List
-    	//return new ArrayList<>(m_AssetRepo.findAll());
-    	
-    	return m_AssetRepo.findAll();
-    }
+    private ProjectEntityService m_ProjectService;
 
     public List<ProjectAsset> getAllByProjectID(Long id)
     {
-        Optional<ProjectEntity> entityDBOpt = m_ProjectRepo.findById(id);
-        if (entityDBOpt.isEmpty()) return null;
-
-        // Found a valid project
-        return entityDBOpt.get().getAssets();
+        return m_ProjectService.getById(id).getAssets();
     }
 
     public ProjectAsset save(@Valid NewAsset newAsset)
     {
-        Optional<ProjectEntity> entityDBOpt = m_ProjectRepo.findById(newAsset.getProjectID());
-        if (entityDBOpt.isEmpty()) return null;
+        ProjectEntity projectDB = m_ProjectService.getById(newAsset.getProjectID());
 
         ProjectAsset asset = new ProjectAsset();
         asset.setName(newAsset.getName());
@@ -56,17 +39,13 @@ public class ProjectAssetService
         if (!decodedString.isEmpty())
             asset.encodeAssetFile(decodedString);
 
-        entityDBOpt.get().getAssets().add(asset);
-        m_AssetRepo.save(asset);
-        return asset;
+        projectDB.getAssets().add(asset);
+        return repo.save(asset);
     }
 
     public ProjectAsset update(@Valid NewAsset entity, Long assetID)
     {
-        Optional<ProjectAsset> entityDBOpt = m_AssetRepo.findById(assetID);
-        if (entityDBOpt.isEmpty()) return null;
-
-        ProjectAsset entityDB = entityDBOpt.get();
+        ProjectAsset entityDB = getById(assetID);
 
         entityDB.setName(entity.getName());
         entityDB.setDescription(entity.getDescription());
@@ -76,20 +55,16 @@ public class ProjectAssetService
         if (!decodedString.isEmpty())
             entityDB.encodeAssetFile(decodedString);
 
-        return m_AssetRepo.save(entityDB);
+        return repo.save(entityDB);
     }
 
-    public boolean delete(Long projectID, Long assetID)
+    public void delete(Long projectID, Long assetID)
     {
-        Optional<ProjectEntity> projectDBOpt = m_ProjectRepo.findById(projectID);
-        Optional<ProjectAsset> assetDBOpt = m_AssetRepo.findById(assetID);
-        if (assetDBOpt.isEmpty() || projectDBOpt.isEmpty()) return false;
-
-        ProjectEntity projectDB = projectDBOpt.get();
+        ProjectEntity projectDB = m_ProjectService.getById(projectID);
+        ProjectAsset projectAssetDB = getById(assetID);
 
         projectDB.getAssets().removeIf(asset -> assetID.equals(asset.getID()));
 
-        m_AssetRepo.deleteById(assetID);
-        return true;
+        repo.delete(projectAssetDB);
     }
 }

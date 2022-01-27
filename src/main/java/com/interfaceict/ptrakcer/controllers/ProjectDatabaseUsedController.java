@@ -38,9 +38,7 @@ public class ProjectDatabaseUsedController {
 	@DeleteMapping("/{projectSoftDetailsID}/{dbUsedID}")
 	public String deleteDatabase(@PathVariable("projectSoftDetailsID") Long projectSoftDetailsID,
 			@PathVariable("dbUsedID") Long dbUsedID) {
-		if (m_Service.delete(projectSoftDetailsID, dbUsedID))
-			return "Deleted successfully!";
-
-		return "Deletion failed!";
+		m_Service.delete(projectSoftDetailsID, dbUsedID);
+		return "Deleted successfully!";
 	}
 }

@@ -37,9 +37,7 @@ public class ProjectDependencyController {
 
 	@DeleteMapping("/{project_id}/{dep_id}")
 	public String deleteDep(@PathVariable("project_id") Long projectID, @PathVariable("dep_id") Long depID) {
-		if (m_Service.delete(projectID, depID))
-			return "Deleted successfully!";
-
-		return "Deletion failed!";
+		m_Service.delete(projectID, depID);
+		return "Deleted successfully!";
 	}
 }

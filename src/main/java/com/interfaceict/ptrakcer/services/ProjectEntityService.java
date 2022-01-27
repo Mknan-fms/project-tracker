@@ -8,24 +8,16 @@ import com.interfaceict.ptrakcer.dto.requests.NewProject;
 import com.interfaceict.ptrakcer.enums.ProjectStatus;
 import com.interfaceict.ptrakcer.models.ProjectEntity;
 import com.interfaceict.ptrakcer.repositories.ProjectEntityRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.interfaceict.ptrakcer.services.helpers.GeneralServiceHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 @Service
-public class ProjectEntityService
+public class ProjectEntityService extends GeneralServiceHelper<ProjectEntity, ProjectEntityRepo>
 {
-    @Autowired
-    private ProjectEntityRepo m_Repo;
-
-    public List<ProjectEntity> getAll() { return new ArrayList<>(m_Repo.findAll()); }
-
     public ProjectEntity save(@Valid NewProject newProjectRequest)
     {
     	ProjectEntity projectEntity = new ProjectEntity();
@@ -40,15 +32,12 @@ public class ProjectEntityService
         LocalDate completionDate = projectEntity.getStartDate().plusMonths(projectEntity.getDuration());
     	projectEntity.setCompletionDate(completionDate);
 
-    	return m_Repo.save(projectEntity);
+    	return repo.save(projectEntity);
     }
 
     public ProjectEntity update(NewProject entity, Long id)
     {
-        Optional<ProjectEntity> entityDBOpt = m_Repo.findById(id);
-        if (entityDBOpt.isEmpty()) return null;
-
-        ProjectEntity entityDB = entityDBOpt.get();
+        ProjectEntity entityDB = getById(id);
 
         entityDB.setName(entity.getName());
         entityDB.setDescription(entity.getDescription());
@@ -58,7 +47,7 @@ public class ProjectEntityService
         entityDB.setCompletionDate(entity.getCompletionDate());
         entityDB.setDeliveryDate(entity.getDeliveryDate());
 
-        return m_Repo.save(entityDB);
+        return repo.save(entityDB);
     }
 
     public Boolean updateStatus(ProjectStatus status, Long id)
@@ -66,24 +55,18 @@ public class ProjectEntityService
         if (status == ProjectStatus.COMPLETED)
             return false;
 
-        Optional<ProjectEntity> entityDBOpt = m_Repo.findById(id);
-        if (entityDBOpt.isEmpty())
-            return false;
-
-        ProjectEntity entityDB = entityDBOpt.get();
+        ProjectEntity entityDB = getById(id);
         entityDB.setStatus(status);
 
-        m_Repo.save(entityDB);
+        repo.save(entityDB);
         return true;
     }
 
-    public void delete(Long id) { m_Repo.deleteById(id); }
-    
-    /**
-     * TODO: instead of defining and calling `findProjectById` repository method every time
-     *       we can write `getProjectbyId` method here (For the sake of code re usability)
-     *       This is also valid for other entities's services methods  
-     */
+    public void delete(Long id)
+    {
+        ProjectEntity entityDB = getById(id);
+        repo.delete(entityDB);
+    }
     
 }
 

@@ -7,6 +7,7 @@ package com.interfaceict.ptrakcer.dto.requests;
 import com.interfaceict.ptrakcer.enums.ApplicationType;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,9 @@ public class NewProjectSoftwareDetail
 {
     @NotNull @NotEmpty
     private String name;
+
+    @NotNull @Min(1)
+    private Long projectID;
 
     private String description;
 

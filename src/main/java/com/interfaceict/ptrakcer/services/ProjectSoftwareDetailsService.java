@@ -5,26 +5,25 @@
 package com.interfaceict.ptrakcer.services;
 
 import com.interfaceict.ptrakcer.dto.requests.NewProjectSoftwareDetail;
+import com.interfaceict.ptrakcer.models.ProjectEntity;
 import com.interfaceict.ptrakcer.models.ProjectSoftwareDetails;
 import com.interfaceict.ptrakcer.repositories.ProjectSoftwareDetailsRepo;
+import com.interfaceict.ptrakcer.services.helpers.GeneralServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ProjectSoftwareDetailsService
+public class ProjectSoftwareDetailsService extends GeneralServiceHelper<ProjectSoftwareDetails, ProjectSoftwareDetailsRepo>
 {
     @Autowired
-    private ProjectSoftwareDetailsRepo m_ProjectSoftDetailsRepo;
-
-    public List<ProjectSoftwareDetails> getAll() { return new ArrayList<>(m_ProjectSoftDetailsRepo.findAll()); }
+    private ProjectEntityService m_ProjectEntityService;
 
     public ProjectSoftwareDetails save(@Valid NewProjectSoftwareDetail detail)
     {
+        ProjectEntity projectEntity = m_ProjectEntityService.getById(detail.getProjectID());
+
         ProjectSoftwareDetails softwareDetails = new ProjectSoftwareDetails();
         softwareDetails.setName(detail.getName());
         softwareDetails.setDescription(detail.getDescription());
@@ -32,30 +31,30 @@ public class ProjectSoftwareDetailsService
         softwareDetails.setProgrammingLanguage(detail.getLang());
         softwareDetails.setFrameworkUsed(detail.getFrameworkUsed());
 
-        return m_ProjectSoftDetailsRepo.save(softwareDetails);
+        projectEntity.setSoftwareDetails(softwareDetails);
+        return repo.save(softwareDetails);
     }
 
     public ProjectSoftwareDetails update(@Valid NewProjectSoftwareDetail details, Long projectSoftDetailsID)
     {
-        Optional<ProjectSoftwareDetails> entityDBOpt = m_ProjectSoftDetailsRepo.findById(projectSoftDetailsID);
-        if (entityDBOpt.isEmpty()) return null;
+        ProjectEntity projectEntity = m_ProjectEntityService.getById(details.getProjectID());
 
-        ProjectSoftwareDetails entityDB = entityDBOpt.get();
+        ProjectSoftwareDetails entityDB = getById(projectSoftDetailsID);
         entityDB.setName(details.getName());
         entityDB.setDescription(details.getDescription());
         entityDB.setApplicationType(details.getType());
         entityDB.setProgrammingLanguage(details.getLang());
         entityDB.setFrameworkUsed(details.getFrameworkUsed());
 
-        return m_ProjectSoftDetailsRepo.save(entityDB);
+        projectEntity.setSoftwareDetails(entityDB);
+        return repo.save(entityDB);
     }
 
-    public Boolean delete(Long projectSoftDetailsID)
+    public void delete(Long projectID, Long projectSoftDetailsID)
     {
-        Optional<ProjectSoftwareDetails> entityDBOpt = m_ProjectSoftDetailsRepo.findById(projectSoftDetailsID);
-        if (entityDBOpt.isEmpty()) return false;
-
-        m_ProjectSoftDetailsRepo.delete(entityDBOpt.get());
-        return true;
+        ProjectEntity projectEntity = m_ProjectEntityService.getById(projectID);
+        ProjectSoftwareDetails entityDB = getById(projectSoftDetailsID);
+        projectEntity.setSoftwareDetails(null);
+        repo.delete(entityDB);
     }
 }

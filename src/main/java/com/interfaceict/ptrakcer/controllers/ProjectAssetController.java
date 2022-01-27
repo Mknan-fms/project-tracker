@@ -41,9 +41,7 @@ public class ProjectAssetController {
 
 	@DeleteMapping("/{project_id}/{asset_id}")
 	public String deleteAsset(@PathVariable("project_id") Long projectID, @PathVariable("asset_id") Long assetID) {
-		if (m_AssetService.delete(projectID, assetID))
-			return "Deleted successfully!";
-
-		return "Deletion failed!";
+		m_AssetService.delete(projectID, assetID);
+		return "Deleted successfully!";
 	}
 }
