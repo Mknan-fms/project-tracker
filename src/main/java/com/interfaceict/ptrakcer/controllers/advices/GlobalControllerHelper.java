@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class GlobalControllerHelper extends ResponseEntityExceptionHandler
@@ -17,5 +18,12 @@ public class GlobalControllerHelper extends ResponseEntityExceptionHandler
     public ResponseEntity<Object> handleNotFoundException(NotFoundException notFoundException, WebRequest request)
     {
         return new ResponseEntity<>(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request)
+    {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
